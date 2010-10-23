@@ -2,13 +2,22 @@ package com.amplafi.android;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class MessageEditorActivity extends Activity {
+import com.amplafi.android.task.SendTextTask;
+import com.amplafi.android.task.SendTextTask.SendTextRequestor;
+
+public class MessageEditorActivity extends Activity
+implements SendTextRequestor {
+
+    private static final String TAG = "MessageEditorActivity";
     private Button mSubmitButton;
     private Button mEditButton;
     private Button mGetButton;
@@ -40,6 +49,47 @@ public class MessageEditorActivity extends Activity {
 
         builder.setTitle("Send To Server");
         builder.setMessage("Send my message to the Server")
+            .setPositiveButton("of course", new Dialog.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            })
             .create().show();
+
+        /*
+         * start an asynchronous task that will send the message to the server
+         * implement an interface that will receive the notification when the
+         * server responds
+         */
+        SendTextTask sendTask = new SendTextTask(this);
+        sendTask.execute("My text to send");
+
     }
+
+    /**
+     * @see com.amplafi.android.task.SendTextTask.SendTextRequestor#taskStarted()
+     */
+    @Override
+    public void taskStarted() {
+    }
+
+    /**
+     * @see com.amplafi.android.task.SendTextTask.SendTextRequestor#taskCancelled()
+     */
+    @Override
+    public void taskCancelled() {
+        throw new UnsupportedOperationException("SendTextRequestor.taskCancelled");
+    }
+
+    /**
+     * @see com.amplafi.android.task.SendTextTask.SendTextRequestor#taskCompleted(java.lang.String)
+     */
+    @Override
+    public void taskCompleted(String result) {
+        Log.d(TAG, "I got '" + result + "'");
+
+    }
+
 }
