@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.amplafi.android.task.SendTextTask;
 import com.amplafi.android.task.SendTextTask.SendTextRequestor;
@@ -21,6 +22,7 @@ implements SendTextRequestor {
     private Button mSubmitButton;
     private Button mEditButton;
     private Button mGetButton;
+    private TextView mFeedback;
 
     private Context mContext;
 
@@ -33,14 +35,13 @@ implements SendTextRequestor {
         mSubmitButton = (Button) findViewById(R.id.send_text_to_server);
         mEditButton   = (Button) findViewById(R.id.send_edit_to_server);
         mGetButton    = (Button) findViewById(R.id.get_texts_from_server);
+        mFeedback     = (TextView) findViewById(R.id.feedback);
 
         mSubmitButton.setOnClickListener(new OnClickListener() {
-
             @Override
             public void onClick(View arg0) {
                 sendTextToServer();
             }
-
         });
     }
 
@@ -64,7 +65,11 @@ implements SendTextRequestor {
          * server responds
          */
         SendTextTask sendTask = new SendTextTask(this);
-        sendTask.execute("My text to send");
+        String[] params = {
+            "CreateAlert",
+            "messageHeadline=something&messageBody=somethingelse"
+        };
+        sendTask.execute(params);
 
     }
 
@@ -88,8 +93,7 @@ implements SendTextRequestor {
      */
     @Override
     public void taskCompleted(String result) {
-        Log.d(TAG, "I got '" + result + "'");
-
+        mFeedback.setText("I got '" + result + "'");
     }
 
 }
