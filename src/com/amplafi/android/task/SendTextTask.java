@@ -19,6 +19,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.DefaultHttpClientConnection;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -54,7 +55,9 @@ public class SendTextTask extends AsyncTask<String, Void, String> {
         InputStream iStream = getData(params);
         try {
             output = IOUtils.toString(iStream);
-        } catch (IOException e) {
+            JSONObject jsonObject = new JSONObject(output);
+            
+        } catch (Exception e) {
             output = e.getMessage();
         }
         
