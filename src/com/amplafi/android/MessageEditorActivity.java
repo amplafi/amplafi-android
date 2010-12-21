@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,6 +38,7 @@ implements SendTextRequestor {
         mFeedback     = (TextView) findViewById(R.id.feedback);
 
         mSubmitButton.setOnClickListener(new OnClickListener() {
+            @Override
             public void onClick(View arg0) {
                 sendTextToServer();
             }
@@ -50,6 +52,7 @@ implements SendTextRequestor {
         builder.setMessage("Send my message to the Server")
             .setPositiveButton("of course", new Dialog.OnClickListener() {
 
+                @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
@@ -73,12 +76,14 @@ implements SendTextRequestor {
     /**
      * @see com.amplafi.android.task.SendTextTask.SendTextRequestor#taskStarted()
      */
+    @Override
     public void taskStarted() {
     }
 
     /**
      * @see com.amplafi.android.task.SendTextTask.SendTextRequestor#taskCancelled()
      */
+    @Override
     public void taskCancelled() {
         throw new UnsupportedOperationException("SendTextRequestor.taskCancelled");
     }
@@ -86,6 +91,7 @@ implements SendTextRequestor {
     /**
      * @see com.amplafi.android.task.SendTextTask.SendTextRequestor#taskCompleted(java.lang.String)
      */
+    @Override
     public void taskCompleted(String result) {
         mFeedback.setText("I got '" + result + "'");
     }
