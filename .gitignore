@@ -1,2 +1,6 @@
-bin
-gen
+/bin
+/target
+/.settings
+/.classpath
+/.project
+/test-output
