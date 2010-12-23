@@ -5,6 +5,7 @@
 	<projects>
         <project>amplafi-sworddance</project>
         <project>amplafi-json</project>
+        <project>amplafi-flow-client</project>        
 	</projects>
 	<buildSpec>
 		<buildCommand>
