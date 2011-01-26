@@ -17,12 +17,19 @@
             <version>2.3.1</version>
             <scope>provided</scope>
         </dependency>
-        <!-- dependency>
+        <dependency>
         	<groupId>org.amplafi</groupId>
         	<artifactId>amplafi-flow-client</artifactId>
         	<version>${amplafi-flow-build}</version>
-        </dependency-->
-    </dependencies>
+        </dependency>
+        <dependency>
+        	<groupId>commons-logging</groupId>
+        	<artifactId>commons-logging</artifactId>
+        	<version>1.1.1</version>
+        	<type>jar</type>
+        	<scope>provided</scope>
+        </dependency>
+  </dependencies>
     <build>
         <finalName>${project.artifactId}</finalName>
         <sourceDirectory>src</sourceDirectory>
