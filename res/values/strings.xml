@@ -4,7 +4,7 @@
     <string name="edit">Edit</string>
     <string name="submit">Submit</string>
     <string name="edit_your_message_here">Edit your message here</string>
-    <string name="app_name">Basic Amplafi Message Editor</string>
+    <string name="app_name">Amplafi Flow Client</string>
     <string name="message_editor_intro">Message Editor</string>
 </resources>
 
