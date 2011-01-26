@@ -3,9 +3,9 @@
 	<name>amplafi-android</name>
 	<comment></comment>
 	<projects>
-        <project>amplafi-sworddance</project>
-        <project>amplafi-json</project>
-        <project>amplafi-flow-client</project>        
+		<project>amplafi-sworddance</project>
+		<project>amplafi-json</project>
+		<project>amplafi-flow-client</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
@@ -24,6 +24,11 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
+			<name>org.maven.ide.eclipse.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>com.android.ide.eclipse.adt.ApkBuilder</name>
 			<arguments>
 			</arguments>
@@ -31,6 +36,7 @@
 	</buildSpec>
 	<natures>
 		<nature>com.android.ide.eclipse.adt.AndroidNature</nature>
+		<nature>org.maven.ide.eclipse.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
 </projectDescription>
