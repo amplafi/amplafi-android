@@ -3,6 +3,7 @@
 		<artifactId>amplafi-opensource-parent</artifactId>
 		<groupId>org.amplafi</groupId>
 		<version>0.9.3-SNAPSHOT</version>
+		<relativePath>../amplafi-opensource-parent/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
   <groupId>org.amplafi</groupId>
