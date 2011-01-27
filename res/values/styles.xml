@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- The overall application theme -->
+  <style name="ClientTheme" parent="android:Theme.Light">
+    <item name="android:windowNoTitle">true</item>
+  </style>
+</resources>
