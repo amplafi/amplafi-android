@@ -5,10 +5,10 @@ HOWTO
 1. Install Maven 2.2.1
 2. Install latest Android SDK
 3. Set environment variable ANDROID_HOME to the path of your installed Android SDK and add $ANDROID_HOME/tools to your $PATH. (or on Windows %ANDROID_HOME%/tools)
-4. clone Amplafi Opensource Parent:
-    'git clone https://aectann@github.com/amplafi/amplafi-opensource-parent.git'
-5. clone Amplafi Android:
-    'git clone https://aectann@github.com/amplafi/amplafi-android.git'
+4. clone Amplafi Opensource Parent, i.e.:
+    'git clone https://YOUR_GITHUB_USERNAME@github.com/amplafi/amplafi-opensource-parent.git'
+5. clone Amplafi Android i.e.:
+    'git clone https://YOUR_GITHUB_USERNAME@github.com/amplafi/amplafi-android.git'
 
 ..Set up Eclipse
 1. switch to the project directory: 
