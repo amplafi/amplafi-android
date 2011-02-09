@@ -1,5 +1,9 @@
 package com.amplafi.android;
 
+import static org.amplafi.flow.auth.StandardFlowRequestParameters.flowClientUserId;
+
+import java.net.URI;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,40 +17,22 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.amplafi.android.task.HttpRequestTask;
+
 public class MessagesListActivity extends ListActivity {
+
+	private static final int GET_AUTH = 1;
+	
+	private BaseAdapter listAdapter;
+	
+	private boolean requestLogin;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setListAdapter(new BaseAdapter() {
-			
-			@Override
-			public View getView(int position, View convertView, ViewGroup listView) {
-				TextView view;
-				if (convertView != null){
-					view = (TextView) convertView;
-				} else {
-					view = (TextView) getLayoutInflater().inflate(R.layout.list_item_message, null);
-				}
-				view.setText(getItem(position) + " " + String.valueOf(position));
-				return view;
-			}
-			
-			@Override
-			public long getItemId(int position) {
-				return 0;
-			}
-			
-			@Override
-			public Object getItem(int position) {
-				return "Dummy message";
-			}
-			
-			@Override
-			public int getCount() {
-				return 10;
-			}
-		});
+		requestLogin = true;
+		listAdapter = new RemoteListAdapter();
+		setListAdapter(listAdapter);
 		
 		getListView().setOnItemClickListener(new OnItemClickListener() {
 
@@ -56,6 +42,72 @@ public class MessagesListActivity extends ListActivity {
 				startActivity(new Intent(MessagesListActivity.this, MessageEditActivity.class));
 			}
 		});
+	}
+	
+	private class RemoteListAdapter extends BaseAdapter {
+		@Override
+		public View getView(int position, View convertView, ViewGroup listView) {
+			TextView view;
+			if (convertView != null){
+				view = (TextView) convertView;
+			} else {
+				view = (TextView) getLayoutInflater().inflate(R.layout.list_item_message, null);
+			}
+			view.setText(getItem(position) + " " + String.valueOf(position));
+			return view;
+		}
+		
+		@Override
+		public long getItemId(int position) {
+			return 0;
+		}
+		
+		@Override
+		public Object getItem(int position) {
+			return "Dummy message";
+		}
+		
+		@Override
+		public int getCount() {
+			return 10;
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (requestLogin) {
+			startActivityForResult(new Intent(this, AuthActivity.class), GET_AUTH);
+		}
+	}
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		requestLogin = true;
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case GET_AUTH:
+			if(RESULT_OK == resultCode){
+				listAdapter.notifyDataSetChanged();
+				CharSequence clientId = data.getCharSequenceExtra(flowClientUserId.toString());
+				requestLogin = clientId == null || clientId.length() == 0;
+				new HttpRequestTask(URI.create("http://amplafi.net")) {
+					@Override
+					protected void onPostExecute(String result) {
+						super.onPostExecute(result);
+						listAdapter.notifyDataSetChanged();
+					}
+				}.execute();
+			}
+			break;
+		default:
+			break;
+		}
 	}
 	
 	@Override
