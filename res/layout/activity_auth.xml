@@ -5,7 +5,7 @@
 	<EditText android:layout_width="200dip" android:layout_height="wrap_content"
 		android:layout_centerInParent="true" android:id="@+id/input" />
 	<TextView android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:text="Enter your flow client ID"
+		android:layout_height="wrap_content" android:text="@string/label_login"
 		android:layout_above="@id/input" 
 		android:layout_centerHorizontal="true"/>
 	<Button android:layout_width="wrap_content"
@@ -13,4 +13,5 @@
 		android:layout_below="@id/input" 
 		android:layout_centerHorizontal="true"
 		android:id="@+id/login"/>
+	
 </RelativeLayout>

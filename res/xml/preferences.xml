@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference android:title="Flow Server Address" android:dialogTitle="Flow server address" android:key="flowServerURI" android:dialogMessage="Enter server address to connect to"></EditTextPreference>
+</PreferenceScreen>

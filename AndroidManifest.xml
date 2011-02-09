@@ -13,6 +13,7 @@
 		</activity>
 		<activity android:name=".MessagesListActivity" />
 		<activity android:name=".MessageEditActivity" />
+		<activity android:name=".PreferenceActivity" />
 	</application>
 
 	<uses-sdk android:targetSdkVersion="9" android:minSdkVersion="7" />

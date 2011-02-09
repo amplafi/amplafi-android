@@ -6,5 +6,6 @@
     <string name="edit_your_message_here">Edit your message here</string>
     <string name="app_name">Amplafi Flow Client</string>
     <string name="message_editor_intro">Message Editor</string>
+    <string name="label_login">Enter your flow client Id</string>
 </resources>
 

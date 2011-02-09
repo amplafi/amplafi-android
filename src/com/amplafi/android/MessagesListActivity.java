@@ -71,6 +71,9 @@ public class MessagesListActivity extends ListActivity {
 		case R.id.menu_create_message:
 			startActivity(new Intent(this, MessageEditActivity.class));
 			break;
+		case R.id.menu_preferences:
+			startActivity(new Intent(this, PreferenceActivity.class));
+			break;
 		default:
 			break;
 		}
