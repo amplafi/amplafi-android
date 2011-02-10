@@ -20,18 +20,18 @@ import android.os.AsyncTask;
  * @author patmoore
  *
  */
-public abstract class HttpRequestTask extends AsyncTask<Void, Void, String> {
+public abstract class HttpGetRequestTask extends AsyncTask<Void, Void, HttpRequestResult> {
     
 	private String requestString;
 
-    public HttpRequestTask(URI requestUri, String... params) {
+    public HttpGetRequestTask(URI requestUri, Object... params) {
     	StringBuilder request = new StringBuilder(requestUri.toString());
         if(params.length > 0) {
 	        request.append("?");
 	        for (int i = 0; i < params.length / 2; i++) {
 	        	request.append(params[i*2]).append("=");
 	        	try {
-					request.append(URLEncoder.encode(params[i*2+1], "UTF-8"));
+					request.append(URLEncoder.encode(params[i*2+1].toString(), "UTF-8"));
 				} catch (UnsupportedEncodingException e) {
 				}
 	        	if((i + 1) < params.length / 2){
@@ -43,7 +43,7 @@ public abstract class HttpRequestTask extends AsyncTask<Void, Void, String> {
     }
 
 	@Override
-    protected String doInBackground(Void... params) {
+    protected HttpRequestResult doInBackground(Void... params) {
         String output = null;
         try {
             HttpClient client = new DefaultHttpClient();
@@ -53,9 +53,9 @@ public abstract class HttpRequestTask extends AsyncTask<Void, Void, String> {
 			response.getEntity().writeTo(out);
 			output = out.toString();
         } catch (Exception e) {
-            throw new IllegalStateException("Error while trying to access " + requestString, e);
+        	return new HttpRequestResult("Error while trying to access " + requestString, e);
         }
-        return output;
+        return new HttpRequestResult(output);
     }
 }
 

@@ -1,8 +1,13 @@
 package com.amplafi.android;
 
+import static com.amplafi.android.PreferenceUtils.getPreference;
 import static org.amplafi.flow.auth.StandardFlowRequestParameters.flowClientUserId;
+import static org.amplafi.flow.auth.StandardFlowRequestParameters.flowState;
 
 import java.net.URI;
+
+import org.amplafi.json.JSONArray;
+import org.amplafi.json.JSONObject;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -17,13 +22,14 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.amplafi.android.task.HttpRequestTask;
+import com.amplafi.android.task.HttpRequestResult;
+import com.amplafi.android.task.MessageListRequestTask;
 
 public class MessagesListActivity extends ListActivity {
 
 	private static final int GET_AUTH = 1;
 	
-	private BaseAdapter listAdapter;
+	private RemoteListAdapter listAdapter;
 	
 	private boolean requestLogin;
 
@@ -45,6 +51,9 @@ public class MessagesListActivity extends ListActivity {
 	}
 	
 	private class RemoteListAdapter extends BaseAdapter {
+		
+		JSONArray<JSONObject> messages = new JSONArray<JSONObject>();
+		
 		@Override
 		public View getView(int position, View convertView, ViewGroup listView) {
 			TextView view;
@@ -53,23 +62,23 @@ public class MessagesListActivity extends ListActivity {
 			} else {
 				view = (TextView) getLayoutInflater().inflate(R.layout.list_item_message, null);
 			}
-			view.setText(getItem(position) + " " + String.valueOf(position));
+			view.setText(getItem(position).getString("title"));
 			return view;
 		}
 		
 		@Override
 		public long getItemId(int position) {
-			return 0;
+			return messages.getJSONObject(position).getLong("entityId");
 		}
 		
 		@Override
-		public Object getItem(int position) {
-			return "Dummy message";
+		public JSONObject getItem(int position) {
+			return messages.getJSONObject(position);
 		}
 		
 		@Override
 		public int getCount() {
-			return 10;
+			return messages.size();
 		}
 	}
 	
@@ -93,16 +102,26 @@ public class MessagesListActivity extends ListActivity {
 		switch (requestCode) {
 		case GET_AUTH:
 			if(RESULT_OK == resultCode){
-				listAdapter.notifyDataSetChanged();
 				CharSequence clientId = data.getCharSequenceExtra(flowClientUserId.toString());
 				requestLogin = clientId == null || clientId.length() == 0;
-				new HttpRequestTask(URI.create("http://amplafi.net")) {
-					@Override
-					protected void onPostExecute(String result) {
-						super.onPostExecute(result);
-						listAdapter.notifyDataSetChanged();
-					}
-				}.execute();
+				if (!requestLogin) {
+					new MessageListRequestTask(getFlowServerURI(), clientId.toString()) {
+						@Override
+						protected void onPostExecute(HttpRequestResult result) {
+							super.onPostExecute(result);
+							try{
+								JSONObject response = JSONObject.toJsonObject(result.getResult());
+								JSONObject flowSate = response.getJSONObject(flowState.toString());
+								flowSate = flowSate.getJSONObject("fsParameters");
+								JSONArray<JSONObject> messages = flowSate.getJSONArray("broadcastEnvelopes");
+								listAdapter.messages = messages;
+								listAdapter.notifyDataSetChanged();
+							} catch (Exception e) {
+								listAdapter.messages = new JSONArray<JSONObject>();
+							}
+						}
+					}.execute();
+				}
 			}
 			break;
 		default:
@@ -110,6 +129,10 @@ public class MessagesListActivity extends ListActivity {
 		}
 	}
 	
+	private URI getFlowServerURI() {
+		return URI.create(getPreference(this, getString(R.string.flowserveruri_preference_key), getString(R.string.flowserveruri_preference_default)) + "/apiv1");
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();

@@ -7,5 +7,7 @@
     <string name="app_name">Amplafi Flow Client</string>
     <string name="message_editor_intro">Message Editor</string>
     <string name="label_login">Enter your flow client Id</string>
-</resources>
+    <string name="flow_server_address">Flow server address</string>
+    <string name="flow_server_address_request">Enter server address to connect to</string>
+   </resources>
 

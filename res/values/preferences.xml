@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="flowserveruri_preference_key">flowServerURI</string>
+	<string name="flowserveruri_preference_default">http://amplafi.net</string>
+</resources>
