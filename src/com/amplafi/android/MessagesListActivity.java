@@ -56,13 +56,14 @@ public class MessagesListActivity extends ListActivity {
 		
 		@Override
 		public View getView(int position, View convertView, ViewGroup listView) {
-			TextView view;
+			ViewGroup view;
 			if (convertView != null){
-				view = (TextView) convertView;
+				view = (ViewGroup) convertView;
 			} else {
-				view = (TextView) getLayoutInflater().inflate(R.layout.list_item_message, null);
+				view = (ViewGroup) getLayoutInflater().inflate(R.layout.list_item_message, null);
 			}
-			view.setText(getItem(position).getString("title"));
+			((TextView)view.findViewById(R.id.title)).setText(getItem(position).getString("title"));
+			((TextView)view.findViewById(R.id.description)).setText(getItem(position).getString("description"));
 			return view;
 		}
 		
