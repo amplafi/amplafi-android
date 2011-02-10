@@ -9,5 +9,7 @@
     <string name="label_login">Enter your flow client Id</string>
     <string name="flow_server_address">Flow server address</string>
     <string name="flow_server_address_request">Enter server address to connect to</string>
+    <string name="loading">Loading..</string>
+    <string name="getting_messages_list">Getting messages list</string>
    </resources>
 

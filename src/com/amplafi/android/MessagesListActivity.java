@@ -9,7 +9,9 @@ import java.net.URI;
 import org.amplafi.json.JSONArray;
 import org.amplafi.json.JSONObject;
 
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -107,6 +109,13 @@ public class MessagesListActivity extends ListActivity {
 				requestLogin = clientId == null || clientId.length() == 0;
 				if (!requestLogin) {
 					new MessageListRequestTask(getFlowServerURI(), clientId.toString()) {
+						
+						private ProgressDialog dialog;
+
+						protected void onPreExecute() {
+							dialog = ProgressDialog.show(MessagesListActivity.this, getString(R.string.loading), getString(R.string.getting_messages_list));
+						};
+						
 						@Override
 						protected void onPostExecute(HttpRequestResult result) {
 							super.onPostExecute(result);
@@ -120,7 +129,9 @@ public class MessagesListActivity extends ListActivity {
 							} catch (Exception e) {
 								listAdapter.messages = new JSONArray<JSONObject>();
 							}
+							dialog.dismiss();
 						}
+						
 					}.execute();
 				}
 			}
