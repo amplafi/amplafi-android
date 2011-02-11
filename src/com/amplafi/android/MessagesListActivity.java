@@ -1,15 +1,12 @@
 package com.amplafi.android;
 
-import static com.amplafi.android.PreferenceUtils.getPreference;
+import static com.amplafi.android.PreferenceUtils.getFlowServerURI;
 import static org.amplafi.flow.auth.StandardFlowRequestParameters.flowClientUserId;
 import static org.amplafi.flow.auth.StandardFlowRequestParameters.flowState;
-
-import java.net.URI;
 
 import org.amplafi.json.JSONArray;
 import org.amplafi.json.JSONObject;
 
-import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -30,15 +27,16 @@ import com.amplafi.android.task.MessageListRequestTask;
 public class MessagesListActivity extends ListActivity {
 
 	private static final int GET_AUTH = 1;
+	public static final String ENTITY_ID = "entityId";
 	
 	private RemoteListAdapter listAdapter;
 	
-	private boolean requestLogin;
+
+	private CharSequence clientId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestLogin = true;
 		listAdapter = new RemoteListAdapter();
 		setListAdapter(listAdapter);
 		
@@ -47,7 +45,10 @@ public class MessagesListActivity extends ListActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				startActivity(new Intent(MessagesListActivity.this, MessageEditActivity.class));
+				Intent intent = new Intent(MessagesListActivity.this, MessageEditActivity.class);
+				intent.putExtra(ENTITY_ID, id);
+				intent.putExtra(flowClientUserId.toString(), clientId);
+				startActivity(intent);
 			}
 		});
 	}
@@ -71,7 +72,7 @@ public class MessagesListActivity extends ListActivity {
 		
 		@Override
 		public long getItemId(int position) {
-			return messages.getJSONObject(position).getLong("entityId");
+			return messages.getJSONObject(position).getLong(ENTITY_ID);
 		}
 		
 		@Override
@@ -88,15 +89,39 @@ public class MessagesListActivity extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (requestLogin) {
+		if (isLoginNeeded()) {
 			startActivityForResult(new Intent(this, AuthActivity.class), GET_AUTH);
+		} else {
+			new MessageListRequestTask(getFlowServerURI(this), clientId.toString()) {
+				
+				private ProgressDialog dialog;
+
+				protected void onPreExecute() {
+					dialog = ProgressDialog.show(MessagesListActivity.this, getString(R.string.loading), getString(R.string.getting_messages_list));
+				};
+				
+				@Override
+				protected void onPostExecute(HttpRequestResult result) {
+					super.onPostExecute(result);
+					try{
+						JSONObject response = JSONObject.toJsonObject(result.getResult());
+						JSONObject flowSate = response.getJSONObject(flowState.toString());
+						flowSate = flowSate.getJSONObject("fsParameters");
+						JSONArray<JSONObject> messages = flowSate.getJSONArray("broadcastEnvelopes");
+						listAdapter.messages = messages;
+						listAdapter.notifyDataSetChanged();
+					} catch (Exception e) {
+						listAdapter.messages = new JSONArray<JSONObject>();
+					}
+					dialog.dismiss();
+				}
+				
+			}.execute();
 		}
 	}
-	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		requestLogin = true;
+
+	private boolean isLoginNeeded() {
+		return clientId == null || clientId.length() == 0;
 	}
 	
 	@Override
@@ -105,35 +130,7 @@ public class MessagesListActivity extends ListActivity {
 		switch (requestCode) {
 		case GET_AUTH:
 			if(RESULT_OK == resultCode){
-				CharSequence clientId = data.getCharSequenceExtra(flowClientUserId.toString());
-				requestLogin = clientId == null || clientId.length() == 0;
-				if (!requestLogin) {
-					new MessageListRequestTask(getFlowServerURI(), clientId.toString()) {
-						
-						private ProgressDialog dialog;
-
-						protected void onPreExecute() {
-							dialog = ProgressDialog.show(MessagesListActivity.this, getString(R.string.loading), getString(R.string.getting_messages_list));
-						};
-						
-						@Override
-						protected void onPostExecute(HttpRequestResult result) {
-							super.onPostExecute(result);
-							try{
-								JSONObject response = JSONObject.toJsonObject(result.getResult());
-								JSONObject flowSate = response.getJSONObject(flowState.toString());
-								flowSate = flowSate.getJSONObject("fsParameters");
-								JSONArray<JSONObject> messages = flowSate.getJSONArray("broadcastEnvelopes");
-								listAdapter.messages = messages;
-								listAdapter.notifyDataSetChanged();
-							} catch (Exception e) {
-								listAdapter.messages = new JSONArray<JSONObject>();
-							}
-							dialog.dismiss();
-						}
-						
-					}.execute();
-				}
+				clientId = data.getCharSequenceExtra(flowClientUserId.toString());
 			}
 			break;
 		default:
@@ -141,10 +138,6 @@ public class MessagesListActivity extends ListActivity {
 		}
 	}
 	
-	private URI getFlowServerURI() {
-		return URI.create(getPreference(this, getString(R.string.flowserveruri_preference_key), getString(R.string.flowserveruri_preference_default)) + "/apiv1");
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
