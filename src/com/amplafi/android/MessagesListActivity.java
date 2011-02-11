@@ -149,7 +149,9 @@ public class MessagesListActivity extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_create_message:
-			startActivity(new Intent(this, MessageEditActivity.class));
+			Intent intent = new Intent(this, MessageEditActivity.class);
+			intent.putExtra(flowClientUserId.toString(), clientId);
+			startActivity(intent);
 			break;
 		case R.id.menu_preferences:
 			startActivity(new Intent(this, PreferenceActivity.class));
