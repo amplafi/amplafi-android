@@ -18,6 +18,7 @@ import android.widget.EditText;
 
 import com.amplafi.android.task.HttpRequestResult;
 import com.amplafi.android.task.MessageInfoRequestTask;
+import com.amplafi.android.task.PublishMessageRequestTask;
 
 public class MessageEditActivity extends Activity {
 

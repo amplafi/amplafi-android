@@ -1,8 +1,7 @@
-package com.amplafi.android;
+package com.amplafi.android.task;
 
 import java.net.URI;
 
-import com.amplafi.android.task.HttpGetRequestTask;
 import static org.amplafi.flow.auth.StandardFlowRequestParameters.*;
 
 public class PublishMessageRequestTask extends HttpGetRequestTask {
