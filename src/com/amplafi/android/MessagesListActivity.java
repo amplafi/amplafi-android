@@ -1,6 +1,7 @@
 package com.amplafi.android;
 
 import static com.amplafi.android.PreferenceUtils.getFlowServerURI;
+import static org.amplafi.flow.auth.StandardFlowRequestParameters.flow;
 import static org.amplafi.flow.auth.StandardFlowRequestParameters.flowClientUserId;
 import static org.amplafi.flow.auth.StandardFlowRequestParameters.flowState;
 
@@ -92,7 +93,7 @@ public class MessagesListActivity extends ListActivity {
 		if (isLoginNeeded()) {
 			startActivityForResult(new Intent(this, AuthActivity.class), GET_AUTH);
 		} else {
-			new MessageListRequestTask(getFlowServerURI(this), clientId.toString()) {
+			new MessageListRequestTask(getFlowServerURI(this), clientId.toString(), getIntent().getStringExtra(flow.toString())) {
 				
 				private ProgressDialog dialog;
 

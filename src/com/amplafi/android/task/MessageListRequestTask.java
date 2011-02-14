@@ -8,8 +8,8 @@ import java.net.URI;
 
 public abstract class MessageListRequestTask extends HttpGetRequestTask {
 
-	public MessageListRequestTask(URI flowServerURI, String clientId) {
+	public MessageListRequestTask(URI flowServerURI, String clientId, String flowName) {
 		super(flowServerURI, flowClientUserId, clientId,
-				flow, "ApprovedList", fsAdvanceTo, "Messages", fsAdvanceTo, "fap");
+				flow, flowName, fsAdvanceTo, "Messages", fsAdvanceTo, "afap");
 	}
 }
