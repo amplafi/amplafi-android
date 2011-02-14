@@ -114,7 +114,9 @@ public class MessagesListActivity extends ListActivity {
 					} catch (Exception e) {
 						listAdapter.messages = new JSONArray<JSONObject>();
 					}
-					dialog.dismiss();
+					if(dialog.isShowing()){
+						dialog.dismiss();
+					}
 				}
 				
 			}.execute();
