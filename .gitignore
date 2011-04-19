@@ -1,9 +1,5 @@
 /bin
 /target
 /.settings
-/.classpath
-/.project
 /test-output
 /gen
-/.project
-/.classpath
