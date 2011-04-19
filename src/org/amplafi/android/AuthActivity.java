@@ -21,6 +21,16 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 import static org.amplafi.flow.auth.StandardFlowRequestParameters.*;
 
+/**
+ * Asks user to provide a flow client id.
+ * At the moment the client id is just an entity id of a User within amplafi.
+ * Later it will be changed to somewhat more secure and reliable. (i.e. we might 
+ * consider making amplafi to be an OAuth provider).
+ * 
+ * 
+ * @author Konstantin Burov
+ *
+ */
 public class AuthActivity extends Activity {
 
 	TextView input;
