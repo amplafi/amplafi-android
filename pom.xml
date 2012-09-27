@@ -2,7 +2,7 @@
 	<parent>
 		<artifactId>amplafi-opensource-parent</artifactId>
 		<groupId>org.amplafi</groupId>
-		<version>0.9.3-SNAPSHOT</version>
+		<version>1.0.2</version>
 		<relativePath>../amplafi-opensource-parent/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
@@ -15,7 +15,7 @@
        <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
-            <version>2.3.3</version>
+            <version>4.1.1.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
