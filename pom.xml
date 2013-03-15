@@ -2,7 +2,7 @@
 	<parent>
 		<artifactId>amplafi-opensource-parent</artifactId>
 		<groupId>org.amplafi</groupId>
-		<version>1.0.4</version>
+		<version>1.0.5</version>
 		<relativePath>../amplafi-opensource-parent/pom.xml</relativePath>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
